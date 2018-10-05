@@ -1,5 +1,16 @@
 defmodule Identicon do
 
+  @moduledoc"""
+  This Module creates an identicon image from a string. This png will be saved in main dir
+  """
+
+  @doc"""
+  Main Function
+
+  ## Example
+      iex> Identicon.main("test")
+      :ok
+  """
   def main(input)do
     input
     |> hash_input
@@ -11,12 +22,25 @@ defmodule Identicon do
     |> save_image(input)
   end
 
+  @doc"""
+  Hashing input
+
+  ## Example
+      iex> Identicon.hash_input("test")
+      %Identicon.Image{
+        color: nil,
+        grid: nil,
+        hex: [9, 143, 107, 205, 70, 33, 211, 115, 202, 222, 78, 131, 38, 39, 180, 246],
+        pixel_map: nil
+      }
+  """
   def hash_input(input)do
     hex = :crypto.hash(:md5, input)
     |> :binary.bin_to_list
 
     %Identicon.Image{hex: hex}
   end
+
 
   def pick_color(%Identicon.Image{hex: [r, g, b | _tail]} = image)do
     %Identicon.Image{image | color: {r,g,b}}
@@ -33,6 +57,13 @@ defmodule Identicon do
     %Identicon.Image{image | grid: grid}
   end
 
+  @doc"""
+  Main Function
+
+  ## Example
+      iex> Identicon.mirror_row([1,2,3])
+      [1,2,3,2,1]
+  """
   def mirror_row(row)do
     [first, second | _tail ] = row
     row++[second, first]
